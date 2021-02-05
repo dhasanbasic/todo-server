@@ -1,6 +1,15 @@
-# Ista Todo List Assessment Backend
+# Backend Example Solution for the Ista Todo List Assessment
 
-Minimal Spring Boot application with Spring Starter Web and Spring Start Test enabled. This is ment to be a skeleton application for the Ista coding assessment.
+This application demonstrates a possible backend solution to the assessment.
+
+Features:
+* H2-based persistence-layer with an entity class, a repository and some sample data.
+* Business-layer with a simple service.
+  * For demonstrative purposes the domain class is slightly different from the entity class.
+* Presentation-layer with a simple REST-ful service conforming to standards.
+  * For simplicity the domain class (`Reminder`) is also used as the DTO.
+* A minimalistic integration test for the controller (see `TodoApplicationTests`).
+  * Spring MVC Mocking is used to invoke the presentation-layer directly.
 
 ## Requirements
 For building and running the application you need:
