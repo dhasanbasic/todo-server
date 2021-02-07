@@ -5,6 +5,7 @@ import com.ista.isp.assessment.todo.persistence.ReminderRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,13 +23,25 @@ public class ReminderService {
                 .collect(Collectors.toList());
     }
 
-    public Reminder createReminder(String description) {
-        ReminderEntity reminder = new ReminderEntity();
-        reminder.setDescription(description);
-        reminder.setDone(Boolean.FALSE);
+    public Reminder createReminder(Reminder reminder) {
+        ReminderEntity reminderEntity = new ReminderEntity();
+        reminderEntity.setDescription(reminder.getDescription());
+        reminderEntity.setDone(Boolean.FALSE);
 
-        reminderRepository.save(reminder);
-        return mapToDomain(reminder);
+        return mapToDomain(reminderRepository.save(reminderEntity));
+    }
+
+    public Reminder updateReminder(Reminder reminder, Long id) {
+        Optional<ReminderEntity> searchedReminder = reminderRepository.findById(id);
+        if (searchedReminder.isEmpty()) {
+            return null;
+        }
+
+        ReminderEntity reminderFromDb = searchedReminder.get();
+        reminderFromDb.setDescription(reminder.getDescription());
+        reminderFromDb.setDone(reminder.isDone());
+
+        return mapToDomain(reminderRepository.save(reminderFromDb));
     }
 
     public void deleteReminder(Long id) {

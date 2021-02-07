@@ -10,6 +10,7 @@ import java.net.URI;
 import java.util.List;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping("/api/reminders")
 public class ReminderController {
 
@@ -25,15 +26,20 @@ public class ReminderController {
     }
 
     @PostMapping
-    public ResponseEntity<Reminder> createReminder(@RequestParam String description) {
-        Reminder reminder = reminderService.createReminder(description);
-        if (reminder == null) {
+    public ResponseEntity<Reminder> createReminder(@RequestBody Reminder reminder) {
+        Reminder createdReminder = reminderService.createReminder(reminder);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+                .pathSegment("{id}").build(createdReminder.getId());
+        return ResponseEntity.created(uri).body(createdReminder);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Reminder> updateReminder(@PathVariable Long id, @RequestBody Reminder reminder) {
+        Reminder updatedReminder = reminderService.updateReminder(reminder, id);
+        if (updatedReminder == null) {
             return ResponseEntity.notFound().build();
         }
-        else {
-            URI uri = ServletUriComponentsBuilder.fromCurrentRequest().pathSegment("{id}").build(reminder.getId());
-            return ResponseEntity.created(uri).body(reminder);
-        }
+        return ResponseEntity.ok(reminder);
     }
 
     @DeleteMapping("/{id}")

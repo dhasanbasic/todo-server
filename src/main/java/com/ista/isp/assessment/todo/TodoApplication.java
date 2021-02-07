@@ -1,5 +1,6 @@
 package com.ista.isp.assessment.todo;
 
+import com.ista.isp.assessment.todo.business.Reminder;
 import com.ista.isp.assessment.todo.business.ReminderService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -16,9 +17,17 @@ public class TodoApplication {
 	@Bean
 	CommandLineRunner preloadReminders(ReminderService reminderService) {
 		return arguments -> {
-			reminderService.createReminder("Take garbage out");
-			reminderService.createReminder("Change tires");
-			reminderService.createReminder("Bezos' birthday");
+			reminderService.createReminder(buildReminder("Take garbage out", false));
+			reminderService.createReminder(buildReminder("Change tires", true));
+			reminderService.createReminder(buildReminder("Bezos' birthday", false));
 		};
+	}
+
+	private Reminder buildReminder(String description, boolean done) {
+		Reminder reminder = new Reminder();
+		reminder.setDescription(description);
+		reminder.setDone(done);
+
+		return reminder;
 	}
 }
