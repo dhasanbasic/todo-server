@@ -26,7 +26,7 @@ public class ReminderService {
     public Reminder createReminder(Reminder reminder) {
         ReminderEntity reminderEntity = new ReminderEntity();
         reminderEntity.setDescription(reminder.getDescription());
-        reminderEntity.setDone(Boolean.FALSE);
+        reminderEntity.setDone(reminder.isDone());
 
         return mapToDomain(reminderRepository.save(reminderEntity));
     }
